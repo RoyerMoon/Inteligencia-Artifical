@@ -1,4 +1,4 @@
-### Phaser Juego 3 Balas 1 Jugador
+# Phaser Juego 3 Balas 1 Jugador
 
 
 ### Variables globales
@@ -334,7 +334,9 @@ function colisionH() {
 function velocidadRandom(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
+~~~
+### Funcion para renderizar el juego
+~~~
 function render() {
     
 }
