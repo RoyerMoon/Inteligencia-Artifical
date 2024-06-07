@@ -1,7 +1,8 @@
 ### Phaser Juego 3 Balas 1 Jugador
 
-```javascript
+
 ### Variables globales
+~~~
 var w = 800;
 var h = 400;
 var jugador;
@@ -29,11 +30,13 @@ var nnNetwork, nnEntrenamiento, nnSalida, datosEntrenamiento = [];
 var modoAuto = false, eCompleto = false;
 
 var data_phaser = "";
-
+~~~
 ### Creación del juego Phaser
+~~~
 var juego = new Phaser.Game(w, h, Phaser.CANVAS, '', { preload: preload, create: create, update: update, render: render });
-
+~~~
 ### Función para precargar los recursos
+~~~
 function preload() {
     juego.load.image('fondo', 'assets/game/fondo.jpg');
     juego.load.spritesheet('mono', 'assets/sprites/altair.png', 32, 48);
@@ -41,8 +44,10 @@ function preload() {
     juego.load.image('bala', 'assets/sprites/purple_ball.png');
     juego.load.image('menu', 'assets/game/menu.png');
 }
+~~~
 
 ### Función para crear los elementos del juego
+~~~
 function create() {
     juego.physics.startSystem(Phaser.Physics.ARCADE);
     juego.time.desiredFps = 30;
@@ -54,8 +59,8 @@ function create() {
     bala2 = juego.add.sprite(50, 0, 'bala');
     jugador = juego.add.sprite(50, h, 'mono');
 
-    nave3 = juego.add.sprite(w - 100, 0, 'nave'); ### Nueva nave en la esquina superior derecha
-    bala3 = juego.add.sprite(50, 0, 'bala'); ### Bala de la nueva nave
+    nave3 = juego.add.sprite(w - 100, 0, 'nave'); // Nueva nave en la esquina superior derecha
+    bala3 = juego.add.sprite(50, 0, 'bala'); // Bala de la nueva nave
 
     juego.physics.enable(jugador);
     jugador.body.collideWorldBounds = true;
@@ -83,13 +88,15 @@ function create() {
     nnNetwork = new synaptic.Architect.Perceptron(4, 8, 6, 6, 2);
     nnEntrenamiento = new synaptic.Trainer(nnNetwork);
 }
-
+~~~
 ### Función para entrenar la red neuronal
+~~~
 function enRedNeural() {
     nnEntrenamiento.train(datosEntrenamiento, { rate: 0.0001, iterations: 30000, shuffle: true });
 }
-
+~~~
 ### Función para obtener datos de entrenamiento para la red neuronal
+~~~
 function datosDeEntrenamiento(param_entrada) {
     console.log("Entrada", param_entrada[0] + " " + param_entrada[1] + ' ' + param_entrada[2] + " " + param_entrada[3] + ' ' + param_entrada[4] + " " + param_entrada[5]);
     nnSalida = nnNetwork.activate(param_entrada);
@@ -103,15 +110,18 @@ function datosDeEntrenamiento(param_entrada) {
         status[1] = true;
     return status;
 }
-
+~~~
 ### Función para pausar el juego
+~~~
 function pausa() {
     juego.paused = true;
     menu = juego.add.sprite(w / 2, h / 2, 'menu');
     menu.anchor.setTo(0.5, 0.5);
 }
+~~~
 
 ### Función para descargar los resultados en un archivo CSV
+~~~
 function descarga() {
     const enlaceDescarga = document.createElement('a');
     enlaceDescarga.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data_phaser));
@@ -123,8 +133,9 @@ function descarga() {
     enlaceDescarga.click();
     document.body.removeChild(enlaceDescarga);
 }
-
+~~~
 ### Función para manejar la pausa del juego
+~~~
 function mPausa(event) {
     if (juego.paused) {
         var menu_x1 = w / 2 - 270 / 2, menu_x2 = w / 2 + 270 / 2,
@@ -157,8 +168,9 @@ function mPausa(event) {
         }
     }
 }
-
+~~~
 ### Función para resetear las variables del jugador y las balas
+~~~
 function resetVariables() {
     jugador.body.velocity.x = 0;
     jugador.body.velocity.y = 0;
@@ -184,25 +196,29 @@ function resetVariablesB3() {
     bala3.position.y = 0;
     balaD3 = false;
 }
-
+~~~
 ### Función para saltar
+~~~
 function saltar() {
     jugador.body.velocity.y = -270;
 }
-
+~~~
 ### Función para desplazar al jugador a la derecha
+~~~
 function desplazarDer() {
     if (jugador.position.x < 100)
         jugador.position.x += 5;
 }
-
+~~~
 ### Función para resetear la posición del jugador
+~~~
 function reset() {
     if (jugador.position.x > 50)
         jugador.position.x -= 5;
 }
-
+~~~
 ### Función de actualización del juego
+~~~
 function update() {
     fondo.tilePosition.x -= 1;
 
@@ -221,7 +237,7 @@ function update() {
 
     despBala = Math.floor(jugador.position.x - bala.position.x);
     despBala2 = Math.floor(jugador.position.y - bala2.position.y);
-    despBala3 = Math.floor(jugador.position.y - bala2.position.y); ### Distancia en diagonal
+    despBala3 = Math.floor(jugador.position.y - bala2.position.y); // Distancia en diagonal
 
     if (!modoAuto) {
         if (salto.isDown && jugador.body.onFloor())
@@ -280,40 +296,46 @@ function update() {
         data_phaser += despBala + ' ' + velocidadBala + ' ' + despBala2 + ' ' + velocidadBala2 + ' ' + despBala3 + ' ' + velocidadBala3 + ' ' + estatusAire + ' ' + estatusDesp + "\n";
     }
 }
-
+~~~
 ### Función para disparar la bala horizontalmente
+~~~
 function disparo() {
     velocidadBala = -1 * velocidadRandom(150, 350);
     bala.body.velocity.y = 0;
     bala.body.velocity.x = velocidadBala;
     balaD = true;
 }
-
+~~~
 ### Función para disparar la bala verticalmente
+~~~
 function disparoVert() {
     velocidadBala2 = 100;
     bala2.body.velocity.x = 0;
     bala2.body.velocity.y = velocidadBala2;
     balaD2 = true;
 }
-
+~~~
 ### Función para disparar la bala diagonalmente
+~~~
 function disparoDiag() {
     bala3.body.velocity.x = -210;
     bala3.body.velocity.y = 100;
     balaD3 = true;
 }
-
+~~~
 ### Función para manejar la colisión del jugador con una bala
+~~~
 function colisionH() {
     pausa();
 }
-
+~~~
 ### Función para generar una velocidad aleatoria
+~~~
 function velocidadRandom(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function render() {
-    ### Código para renderizar elementos del juego (si es necesario)
+    
 }
+~~~
